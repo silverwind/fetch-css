@@ -1,0 +1,40 @@
+{
+  "name": "fetch-css",
+  "version": "0.0.0",
+  "description": "Extract CSS from websites and browser extensions",
+  "author": "silverwind",
+  "repository": "silverwind/fetch-css",
+  "license": "BSD-2-Clause",
+  "main": "index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "fetch",
+    "css",
+    "website",
+    "extension",
+    "crx"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "acorn": "7.1.0",
+    "css": "2.2.4",
+    "make-fetch-happen": "8.0.1",
+    "parse5": "5.1.1",
+    "rfdc": "1.1.4",
+    "unzipper": "0.10.9",
+    "url-toolkit": "2.1.6"
+  },
+  "devDependencies": {
+    "eslint": "6.7.2",
+    "eslint-config-silverwind": "5.0.3",
+    "updates": "9.3.3",
+    "versions": "7.0.4"
+  }
+}
