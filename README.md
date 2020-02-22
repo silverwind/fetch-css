@@ -31,4 +31,8 @@ const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
 
 Returns a promise that resolves to a `sources` object with additional `css` properties present.
 
+## Related
+
+- [remap-css](https://github.com/silverwind/remap-css) - Remap CSS rules based on declaration value
+
 © [silverwind](https://github.com/silverwind), distributed under BSD licence
