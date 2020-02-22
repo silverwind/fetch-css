@@ -11,10 +11,10 @@ npm i fetch-css
 ```js
 const fetchCss = require("fetch-css");
 
-# retrieve CSS of a website
+// retrieve CSS of a website
 const [{css}] = await fetchCss([{url: "https://google.com"}]);
 
-# extract CSS from a Chrome extension
+// extract CSS from a Chrome extension
 const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
 ```
 
