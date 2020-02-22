@@ -1,6 +1,6 @@
 {
   "name": "fetch-css",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Extract CSS from websites and browser extensions",
   "author": "silverwind",
   "repository": "silverwind/fetch-css",
