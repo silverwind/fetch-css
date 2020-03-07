@@ -1,5 +1,5 @@
 test:
-	npx eslint .
+	yarn -s run eslint .
 
 publish:
 	git push -u --tags origin master
@@ -10,19 +10,19 @@ deps:
 	yarn
 
 update:
-	node updates.js -cu
+	yarn -s run updates -cu
 	$(MAKE) deps
 
 patch: test
-	npx versions -C patch
+	yarn -s run versions -C patch
 	$(MAKE) publish
 
 minor: test
-	npx versions -C minor
+	yarn -s run versions -C minor
 	$(MAKE) publish
 
 major: test
-	npx versions -C major
+	yarn -s run versions -C major
 	$(MAKE) publish
 
 .PHONY: test publish deps update patch minor major
