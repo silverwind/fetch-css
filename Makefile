@@ -1,5 +1,5 @@
 test:
-	yarn -s run eslint .
+	yarn -s run eslint --color .
 
 publish:
 	git push -u --tags origin master
