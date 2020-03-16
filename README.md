@@ -1,5 +1,5 @@
 # fetch-css
-[![](https://img.shields.io/npm/v/fetch-css.svg?style=flat)](https://www.npmjs.org/package/fetch-css) [![](https://img.shields.io/npm/dm/fetch-css.svg)](https://www.npmjs.org/package/fetch-css) [![](https://api.travis-ci.org/silverwind/fetch-css.svg?style=flat)](https://travis-ci.org/silverwind/fetch-css)
+[![](https://img.shields.io/npm/v/fetch-css.svg?style=flat)](https://www.npmjs.org/package/fetch-css) [![](https://img.shields.io/npm/dm/fetch-css.svg)](https://www.npmjs.org/package/fetch-css)
 > Extract CSS from websites and browser extensions
 
 ## Usage
