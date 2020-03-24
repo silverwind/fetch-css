@@ -7,6 +7,7 @@ const fetch = require("make-fetch-happen");
 const parse5 = require("parse5");
 const unzipper = require("unzipper");
 const urlToolkit = require("url-toolkit");
+const {name} = require("./package.json");
 
 async function extract(res) {
   const styleUrls = [];
@@ -68,7 +69,7 @@ async function extensionCss(source, version) {
 
   const res = await fetch(`https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&x=id%3D${id}%26installsource%3Dondemand%26uc`);
   if (res.status !== 200) {
-    console.warn(`(remap-css) Warning: Unexpected status code ${res.status} for extension ${id}`);
+    console.warn(`(${name}) Warning: Unexpected status code ${res.status} for extension ${id}`);
     return "";
   }
 
