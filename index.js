@@ -67,7 +67,10 @@ async function extensionCss(source, version) {
   let css = "";
 
   const res = await fetch(`https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&x=id%3D${id}%26installsource%3Dondemand%26uc`);
-  if (!res.ok) throw new Error(res.statusText);
+  if (res.status !== 200) {
+    console.warn(`(remap-css) Warning: Unexpected status code ${res.status} for extension ${id}`);
+    return "";
+  }
 
   const buffer = await res.buffer();
   const dir = await unzipper.Open.buffer(buffer, {crx: true});
