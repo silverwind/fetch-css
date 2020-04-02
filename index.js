@@ -47,7 +47,7 @@ function isValidCSS(string) {
     if (result && result.type === "stylesheet" && result.stylesheet && Array.isArray(result.stylesheet.rules) && result.stylesheet.rules.length > 1) {
       return true;
     }
-  } catch (err) {}
+  } catch {}
   return false;
 }
 
