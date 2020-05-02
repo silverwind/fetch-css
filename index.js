@@ -2,7 +2,7 @@
 
 const acorn = require("acorn");
 const clone = require("rfdc")();
-const css = require("css");
+const postcss = require("postcss");
 const fetch = require("make-fetch-happen");
 const parse5 = require("parse5");
 const unzipper = require("unzipper");
@@ -43,8 +43,8 @@ function extractStyleTags(html) {
 
 function isValidCSS(string) {
   try {
-    const result = css.parse(string);
-    if (result && result.type === "stylesheet" && result.stylesheet && Array.isArray(result.stylesheet.rules) && result.stylesheet.rules.length > 1) {
+    const root = postcss.parse(string);
+    if (root && root.type === "root" && Array.isArray(root.nodes) && root.rules.length > 1) {
       return true;
     }
   } catch {}
@@ -115,7 +115,8 @@ async function extensionCss(source, version) {
         const str = token.value.trim()
           .replace(/\n/gm, "")
           .replace(/^\);}/, ""); // this is probably not universal to webpack's css-in-js strings
-        if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS
+
+        if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
           css += `${str}\n`;
         }
       }

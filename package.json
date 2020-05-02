@@ -24,9 +24,9 @@
   ],
   "dependencies": {
     "acorn": "7.1.1",
-    "css": "2.2.4",
     "make-fetch-happen": "8.0.4",
     "parse5": "5.1.1",
+    "postcss": "7.0.28",
     "rfdc": "1.1.4",
     "unzipper": "0.10.10",
     "url-toolkit": "2.1.6"
