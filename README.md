@@ -7,19 +7,17 @@
 ```console
 npm i fetch-css
 ```
-
 ```js
 const fetchCss = require("fetch-css");
 
 // retrieve CSS of a website
-const [{css}] = await fetchCss([{url: "https://google.com"}]);
+const [{css}] = await fetchCss([{url: "https://example.com"}]);
 
 // extract CSS from a Chrome extension
 const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
 ```
 
 ## API
-
 ### `fetchCss(sources)`
 
 - `sources`: *Array* Array of source objects
@@ -28,8 +26,9 @@ const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
     - `fetchOpts`: *Object* Options passed to [fetch](https://github.com/npm/make-fetch-happen#fetch)
     - `crx`: *string* A Chrome extension id
     - `contentScriptsOnly`: *boolean* Whether to pull only content scripts from a extension. Default: `false`
+    - `strict`: *boolean* Whether to throw an error if fetch fails. Default: `false`
 
-Returns a promise that resolves to a `sources` object with additional `css` properties present.
+Returns a `Promise` that resolves to a `sources` array with additional `css` properties present on each source.
 
 ## Related
 

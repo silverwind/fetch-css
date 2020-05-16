@@ -24,6 +24,16 @@ async function extract(res) {
   return [styleUrls, styleTags];
 }
 
+function validateStatus(res, url, strict) {
+  if (res.status === 200) return true;
+  const msg = `Failed to fetch ${url}: ${res.status} ${res.statusText}`;
+  if (strict) {
+    throw new Error(msg);
+  } else {
+    console.warn(`(${name}) Warning: ${msg}`);
+  }
+}
+
 function extractStyleHrefs(html) {
   return (html.match(/<link.+?>/g) || []).map(link => {
     const attrs = {};
@@ -63,32 +73,27 @@ async function chromeVersion() {
   return version;
 }
 
-async function extensionCss(source, version) {
-  const id = source.crx;
-  let css = "";
+async function extensionCss({crx, contentScriptsOnly, strict}, version) {
+  const url = `https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&x=id%3D${crx}%26installsource%3Dondemand%26uc`;
 
-  const res = await fetch(`https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&x=id%3D${id}%26installsource%3Dondemand%26uc`);
-  if (res.status !== 200) {
-    console.warn(`(${name}) Warning: Unexpected status code ${res.status} for extension ${id}`);
-    return "";
-  }
+  const res = await fetch(url);
+  validateStatus(res, url, strict);
 
-  const buffer = await res.buffer();
-  const dir = await unzipper.Open.buffer(buffer, {crx: true});
+  const dir = await unzipper.Open.buffer(await res.buffer(), {crx: true});
+
   const files = {};
-
   for (const file of dir.files) {
     files[file.path] = file;
   }
 
   if (!files["manifest.json"]) {
-    throw new Error(`manifest.json not found in chrome extension ${id}`);
+    throw new Error(`manifest.json not found in extension ${crx}`);
   }
 
   let cssFiles = [];
   let jsFiles = [];
 
-  if (!source.contentScriptsOnly) {
+  if (!contentScriptsOnly) {
     for (const path of Object.keys(files)) {
       if (path.endsWith(".css")) cssFiles.push(path);
       if (path.endsWith(".js")) jsFiles.push(path);
@@ -96,7 +101,6 @@ async function extensionCss(source, version) {
   }
 
   const manifest = JSON.parse(String(await files["manifest.json"].buffer()));
-
   for (const {css, js} of manifest.content_scripts || []) {
     if (Array.isArray(css) && css.length) cssFiles.push(...css);
     if (Array.isArray(js) && js.length) jsFiles.push(...js);
@@ -105,6 +109,7 @@ async function extensionCss(source, version) {
   cssFiles = Array.from(new Set(cssFiles));
   jsFiles = Array.from(new Set(jsFiles));
 
+  let css = "";
   for (const file of cssFiles) {
     css += `${await files[file].buffer()}\n`;
   }
@@ -146,10 +151,11 @@ module.exports = async function fetchCss(sources) {
     return source.url.endsWith(".css") ? null : fetch(source.url, source.fetchOpts);
   }));
 
-  for (const [index, response] of Object.entries(sourceResponses)) {
+  for (const [index, res] of Object.entries(sourceResponses)) {
     const source = sources[index];
-    if (response) {
-      const [styleUrls, styleTags] = await extract(response);
+    if (res) {
+      validateStatus(res, source.url, source.strict);
+      const [styleUrls, styleTags] = await extract(res);
       source.styles = styleUrls;
       source.styleTags = styleTags;
     } else if (source.url) {
