@@ -79,10 +79,8 @@ async function extensionCss({crx, contentScriptsOnly, strict}, version) {
   const res = await fetch(url);
   validateStatus(res, url, strict);
 
-  const dir = await unzipper.Open.buffer(await res.buffer(), {crx: true});
-
   const files = {};
-  for (const file of dir.files) {
+  for (const file of (await unzipper.Open.buffer(await res.buffer(), {crx: true}) || {}).files) {
     files[file.path] = file;
   }
 
