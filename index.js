@@ -8,6 +8,7 @@ const parse5 = require("parse5");
 const unzipper = require("unzipper");
 const urlToolkit = require("url-toolkit");
 const {name} = require("./package.json");
+const crxToZip = require("./crx-to-zip");
 
 async function extract(res) {
   const styleUrls = [];
@@ -74,13 +75,16 @@ async function chromeVersion() {
 }
 
 async function extensionCss({crx, contentScriptsOnly, strict}, version) {
-  const url = `https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&x=id%3D${crx}%26installsource%3Dondemand%26uc`;
+  const url = `https://clients2.google.com/service/update2/crx?response=redirect&acceptformat=crx2,crx3&prodversion=${version}&x=id%3D${crx}%26installsource%3Dondemand%26uc`;
 
   const res = await fetch(url);
   validateStatus(res, url, strict);
 
+  const crxBuffer = await res.buffer();
+  const zipBuffer = Buffer.from(crxToZip(crxBuffer));
+
   const files = {};
-  for (const file of (await unzipper.Open.buffer(await res.buffer(), {crx: true}) || {}).files) {
+  for (const file of (await unzipper.Open.buffer(zipBuffer) || {}).files) {
     files[file.path] = file;
   }
 

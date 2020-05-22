@@ -20,10 +20,13 @@
     "crx"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "crx-to-zip.js"
   ],
   "dependencies": {
     "acorn": "7.2.0",
+    "base-64": "0.1.0",
+    "crypto-js": "4.0.0",
     "make-fetch-happen": "8.0.7",
     "parse5": "6.0.0",
     "postcss": "7.0.30",
