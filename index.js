@@ -41,9 +41,8 @@ function extractStyleHrefs(html) {
     parse5.parseFragment(link).childNodes[0].attrs.forEach(attr => {
       attrs[attr.name] = attr.value;
     });
-    if (attrs.rel === "stylesheet" && attrs.href) {
-      return attrs.href;
-    }
+    if (attrs.href && attrs.rel === "stylesheet") return attrs.href;
+    if (attrs.href && /\.css$/i.test(attrs.href.replace(/\?.+/))) return attrs.href;
   }).filter(link => !!link);
 }
 
