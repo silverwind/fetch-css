@@ -54,7 +54,7 @@ function extractStyleTags(html) {
 function isValidCSS(string) {
   try {
     const root = postcss.parse(string);
-    if (root && root.type === "root" && Array.isArray(root.nodes) && root.rules.length > 1) {
+    if (root && root.type === "root" && Array.isArray(root.nodes) && root.nodes.length >= 1 && root.nodes.every(node => node.type === "rule")) {
       return true;
     }
   } catch {}
@@ -71,6 +71,26 @@ async function chromeVersion() {
 
   if (!version) throw new Error(`Unable to match version in response text '${text}'`);
   return version;
+}
+
+function extractCssFromJs(js) {
+  let css = "";
+
+  acorn.parse(js, {
+    onToken: token => {
+      if (token.type.label === "string") {
+        const str = token.value.trim()
+          .replace(/\n/gm, "")
+          .replace(/^\);}/, ""); // this is probably not universal to webpack's css-in-js strings
+
+        if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
+          css += `${str}\n`;
+        }
+      }
+    }
+  });
+
+  return css.trim();
 }
 
 async function extensionCss({crx, contentScriptsOnly, strict}, version) {
@@ -116,17 +136,8 @@ async function extensionCss({crx, contentScriptsOnly, strict}, version) {
   }
 
   for (const file of jsFiles) {
-    acorn.parse(String(await files[file].buffer()), {onToken: async token => {
-      if (token.type.label === "string") {
-        const str = token.value.trim()
-          .replace(/\n/gm, "")
-          .replace(/^\);}/, ""); // this is probably not universal to webpack's css-in-js strings
-
-        if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
-          css += `${str}\n`;
-        }
-      }
-    }});
+    const js = String(await files[file].buffer());
+    css += extractCssFromJs(js);
   }
 
   return css;
@@ -149,7 +160,7 @@ module.exports = async function fetchCss(sources) {
 
   const sourceResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
-    return source.url.endsWith(".css") ? null : fetch(source.url, source.fetchOpts);
+    return source.url.endsWith(".css") || source.url.endsWith(".js") ? null : fetch(source.url, source.fetchOpts);
   }));
 
   for (const [index, res] of Object.entries(sourceResponses)) {
@@ -157,27 +168,33 @@ module.exports = async function fetchCss(sources) {
     if (res) {
       validateStatus(res, source.url, source.strict);
       const [styleUrls, styleTags] = await extract(res);
-      source.styles = styleUrls;
+      source.urls = styleUrls;
       source.styleTags = styleTags;
     } else if (source.url) {
-      source.styles = [source.url];
+      source.urls = [source.url];
     }
   }
 
-  const cssResponses = await Promise.all(sources.map(source => {
+  const fetchResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
-    return Promise.all(source.styles.map(url => fetch(url).then(res => res.text())));
+    return Promise.all(source.urls.map(url => fetch(url).then(res => res.text())));
   }));
 
   const version = await chromeVersion();
 
-  for (const [index, responses] of Object.entries(cssResponses)) {
-    if (sources[index].crx) {
-      sources[index].css = await extensionCss(sources[index], version);
+  for (const [index, responses] of Object.entries(fetchResponses)) {
+    const source = sources[index];
+
+    if (source.crx) {
+      source.css = await extensionCss(source, version);
     } else {
-      sources[index].css = responses.join("\n");
-      if (sources[index].styleTags.length) {
-        sources[index].css += `\n${sources[index].styleTags.join("\n")}`;
+      if (source.url.endsWith(".js")) {
+        source.css = extractCssFromJs(responses.join("\n"));
+      } else {
+        source.css = responses.join("\n");
+        if (source.styleTags.length) {
+          source.css += `\n${source.styleTags.join("\n")}`;
+        }
       }
     }
   }

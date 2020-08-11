@@ -22,7 +22,7 @@ const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
 
 - `sources`: *Array* Array of source objects
   - `source`: *Object*
-    - `url`: *string* An absolute URL pointing to either a website or directly to a CSS file
+    - `url`: *string* An absolute URL pointing to either a website or directly to a CSS or JS file (to extract inlined CSS strings from)
     - `fetchOpts`: *Object* Options passed to [fetch](https://github.com/npm/make-fetch-happen#fetch)
     - `crx`: *string* A Chrome extension id
     - `contentScriptsOnly`: *boolean* Whether to pull only content scripts from a extension. Default: `false`
