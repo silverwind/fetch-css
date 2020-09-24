@@ -77,6 +77,7 @@ function extractCssFromJs(js) {
   let css = "";
 
   acorn.parse(js, {
+    ecmaVersion: "latest",
     onToken: token => {
       if (token.type.label === "string") {
         const str = token.value.trim()

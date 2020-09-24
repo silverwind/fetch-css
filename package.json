@@ -24,21 +24,21 @@
     "crx-to-zip.js"
   ],
   "dependencies": {
-    "acorn": "7.4.0",
+    "acorn": "8.0.1",
     "base-64": "0.1.0",
     "crypto-js": "4.0.0",
     "fetch-enhanced": "4.0.2",
     "node-fetch": "2.6.1",
     "parse5": "6.0.1",
-    "postcss": "7.0.32",
+    "postcss": "8.0.9",
     "rfdc": "1.1.4",
     "unzipper": "0.10.11",
     "url-toolkit": "2.2.0"
   },
   "devDependencies": {
-    "eslint": "7.6.0",
-    "eslint-config-silverwind": "18.0.2",
-    "updates": "10.3.3",
-    "versions": "8.4.2"
+    "eslint": "7.9.0",
+    "eslint-config-silverwind": "18.0.9",
+    "updates": "11.1.4",
+    "versions": "8.4.3"
   }
 }
