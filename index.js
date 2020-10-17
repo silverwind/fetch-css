@@ -161,7 +161,8 @@ module.exports = async function fetchCss(sources) {
 
   const sourceResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
-    return source.url.endsWith(".css") || source.url.endsWith(".js") ? null : fetch(source.url, source.fetchOpts);
+    const {pathname} = new URL(source.url);
+    return pathname.endsWith(".css") || pathname.endsWith(".js") ? null : fetch(source.url, source.fetchOpts);
   }));
 
   for (const [index, res] of Object.entries(sourceResponses)) {
@@ -193,7 +194,7 @@ module.exports = async function fetchCss(sources) {
         source.css = extractCssFromJs(responses.join("\n"));
       } else {
         source.css = responses.join("\n");
-        if (source.styleTags.length) {
+        if (source.styleTags && source.styleTags.length) {
           source.css += `\n${source.styleTags.join("\n")}`;
         }
       }
