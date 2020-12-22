@@ -20,15 +20,15 @@ update: node_modules
 	@touch node_modules
 
 patch: node_modules test
-	yarn -s run versions -Cc 'make build' patch
+	yarn -s run versions patch
 	@$(MAKE) --no-print-directory publish
 
 minor: node_modules test
-	yarn -s run versions -Cc 'make build' minor
+	yarn -s run versions minor
 	@$(MAKE) --no-print-directory publish
 
 major: node_modules test
-	yarn -s run versions -Cc 'make build' major
+	yarn -s run versions major
 	@$(MAKE) --no-print-directory publish
 
 .PHONY: lint test unittest publish deps update patch minor major
