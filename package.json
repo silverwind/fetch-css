@@ -21,20 +21,20 @@
   ],
   "dependencies": {
     "acorn": "8.0.4",
-    "base-64": "0.1.0",
+    "base-64": "1.0.0",
     "crypto-js": "4.0.0",
-    "fetch-enhanced": "5.0.0",
+    "fetch-enhanced": "5.0.1",
     "node-fetch": "2.6.1",
     "parse5": "6.0.1",
-    "postcss": "8.1.1",
+    "postcss": "8.2.1",
     "rfdc": "1.1.4",
     "unzipper": "0.10.11",
-    "url-toolkit": "2.2.0"
+    "url-toolkit": "2.2.1"
   },
   "devDependencies": {
-    "eslint": "7.11.0",
-    "eslint-config-silverwind": "21.0.1",
-    "updates": "11.2.5",
-    "versions": "8.4.3"
+    "eslint": "7.16.0",
+    "eslint-config-silverwind": "27.0.0",
+    "updates": "11.4.1",
+    "versions": "8.4.4"
   }
 }

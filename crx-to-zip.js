@@ -8,7 +8,7 @@ const btoa = require("base-64").encode;
 
 function calcLength(a, b, c, d) {
   let length = 0;
-  length += a << 0;
+  length += a << 0; // eslint-disable-line unicorn/prefer-math-trunc
   length += b << 8;
   length += c << 16;
   length += d << 24 >>> 0;
