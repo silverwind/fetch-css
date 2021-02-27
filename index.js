@@ -38,9 +38,9 @@ function validateStatus(res, url, strict) {
 function extractStyleHrefs(html) {
   return (html.match(/<link.+?>/g) || []).map(link => {
     const attrs = {};
-    parse5.parseFragment(link).childNodes[0].attrs.forEach(attr => {
+    for (const attr of parse5.parseFragment(link).childNodes[0].attrs) {
       attrs[attr.name] = attr.value;
-    });
+    }
     if (attrs.href && attrs.rel === "stylesheet") return attrs.href;
     if (attrs.href && /\.css$/i.test(attrs.href.replace(/\?.+/))) return attrs.href;
   }).filter(link => !!link);
