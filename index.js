@@ -61,18 +61,6 @@ function isValidCSS(string) {
   return false;
 }
 
-// obtain the latest chrome version in major.minor format
-async function chromeVersion() {
-  const res = await fetch(`https://chromedriver.storage.googleapis.com/LATEST_RELEASE`);
-  if (!res.ok) throw new Error(res.statusText);
-
-  const text = await res.text();
-  const [version] = text.match(/[0-9]+\.[0-9]+/) || [];
-
-  if (!version) throw new Error(`Unable to match version in response text '${text}'`);
-  return version;
-}
-
 function extractCssFromJs(js) {
   let css = "";
 
@@ -94,8 +82,18 @@ function extractCssFromJs(js) {
   return css.trim();
 }
 
-async function extensionCss({crx, contentScriptsOnly, strict}, version) {
-  const url = `https://clients2.google.com/service/update2/crx?response=redirect&acceptformat=crx3&prodversion=${version}&x=id%3D${crx}%26installsource%3Dondemand%26uc`;
+async function extensionCss({crx, contentScriptsOnly, strict}) {
+  let url = `https://clients2.google.com/service/update2/crx`;
+  url += `?response=redirect`;
+  url += `&os=linux`;
+  url += `&arch=x86-64`;
+  url += `&os_arch=x86-64`;
+  url += `&acceptformat=crx3`;
+  url += `&prod=chromiumcrx`;
+  url += `&prodchannel=unknown`;
+  url += `&prodversion=9999.0.9999.0`;
+  url += `&x=id%3D${crx}`;
+  url += `%26uc`;
 
   const res = await fetch(url);
   validateStatus(res, url, strict);
@@ -182,13 +180,11 @@ module.exports = async function fetchCss(sources) {
     return Promise.all(source.urls.map(url => fetch(url).then(res => res.text())));
   }));
 
-  const version = await chromeVersion();
-
   for (const [index, responses] of Object.entries(fetchResponses)) {
     const source = sources[index];
 
     if (source.crx) {
-      source.css = await extensionCss(source, version);
+      source.css = await extensionCss(source);
     } else {
       if (source.url.endsWith(".js")) {
         source.css = extractCssFromJs(responses.join("\n"));
