@@ -32,9 +32,9 @@
     "url-toolkit": "2.2.1"
   },
   "devDependencies": {
-    "eslint": "7.20.0",
+    "eslint": "7.21.0",
     "eslint-config-silverwind": "29.0.0",
-    "updates": "11.4.2",
-    "versions": "8.4.4"
+    "updates": "11.4.3",
+    "versions": "8.4.5"
   }
 }
