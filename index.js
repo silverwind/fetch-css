@@ -126,8 +126,13 @@ async function extensionCss({crx, contentScriptsOnly, strict}) {
     if (Array.isArray(js) && js.length) jsFiles.push(...js);
   }
 
+  // dedupe
   cssFiles = Array.from(new Set(cssFiles));
   jsFiles = Array.from(new Set(jsFiles));
+
+  // remove leading slash
+  cssFiles = cssFiles.map(p => p.replace(/^\//, ""));
+  jsFiles = jsFiles.map(p => p.replace(/^\//, ""));
 
   let css = "";
   for (const file of cssFiles) {
