@@ -8,7 +8,7 @@
 npm i fetch-css
 ```
 ```js
-const fetchCss = require("fetch-css");
+import fetchCss from "fetch-css";
 
 // retrieve CSS of a website
 const [{css}] = await fetchCss([{url: "https://example.com"}]);
