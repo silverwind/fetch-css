@@ -5,6 +5,9 @@ node_modules: package-lock.json
 .PHONY: deps
 deps: node_modules
 
+.PHONY: test
+test: lint
+
 .PHONY: lint
 lint: node_modules
 	npx eslint --color .
