@@ -4,7 +4,6 @@ import postcss from "postcss";
 import {parseFragment} from "parse5";
 import unzipper from "unzipper";
 import urlToolkit from "url-toolkit";
-import {name} from "./package.json";
 import crxToZip from "./crx-to-zip.js";
 import nodeFetch from "node-fetch";
 import fetchEnhanced from "fetch-enhanced";
@@ -33,7 +32,7 @@ function validateStatus(res, url, strict) {
   if (strict) {
     throw new Error(msg);
   } else {
-    console.warn(`(${name}) Warning: ${msg}`);
+    console.warn(`(fetch-css) Warning: ${msg}`);
   }
 }
 
