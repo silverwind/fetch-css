@@ -1,9 +1,9 @@
 // based on https://github.com/Rob--W/crxviewer/blob/master/src/lib/crx-to-zip.js
 // (c) 2013 Rob Wu <rob@robwu.nl>
-"use strict";
 
-const encLatin1 = require("crypto-js/enc-latin1");
-const sha256 = require("crypto-js/sha256");
+import encLatin1 from "crypto-js/enc-latin1";
+import sha256 from "crypto-js/sha256";
+
 const btoa = require("base-64").encode;
 
 function calcLength(a, b, c, d) {
@@ -23,7 +23,7 @@ function getBinaryString(bytesView, startOffset, endOffset) {
 }
 
 // Strips CRX headers from zip
-module.exports = function CRXtoZIP(arraybuffer) {
+export default function CRXtoZIP(arraybuffer) {
   // Definition of crx format: http://developer.chrome.com/extensions/crx.html
   const view = new Uint8Array(arraybuffer);
 
@@ -66,7 +66,7 @@ module.exports = function CRXtoZIP(arraybuffer) {
   }
 
   return arraybuffer.slice(zipStartOffset);
-};
+}
 
 function getPublicKeyFromProtoBuf(bytesView, startOffset, endOffset) {
   // Protobuf definition: https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto

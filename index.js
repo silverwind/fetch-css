@@ -1,14 +1,16 @@
-"use strict";
+import acorn from "acorn";
+import cloner from "rfdc";
+import postcss from "postcss";
+import {parseFragment} from "parse5";
+import unzipper from "unzipper";
+import urlToolkit from "url-toolkit";
+import {name} from "./package.json";
+import crxToZip from "./crx-to-zip.js";
+import nodeFetch from "node-fetch";
+import fetchEnhanced from "fetch-enhanced";
 
-const acorn = require("acorn");
-const clone = require("rfdc")();
-const postcss = require("postcss");
-const fetch = require("fetch-enhanced")(require("node-fetch"));
-const parse5 = require("parse5");
-const unzipper = require("unzipper");
-const urlToolkit = require("url-toolkit");
-const {name} = require("./package.json");
-const crxToZip = require("./crx-to-zip");
+const fetch = fetchEnhanced(nodeFetch);
+const clone = cloner();
 
 async function extract(res) {
   const styleUrls = [];
@@ -38,17 +40,18 @@ function validateStatus(res, url, strict) {
 function extractStyleHrefs(html) {
   return (html.match(/<link.+?>/g) || []).map(link => {
     const attrs = {};
-    for (const attr of parse5.parseFragment(link).childNodes[0].attrs) {
+    for (const attr of parseFragment(link).childNodes[0].attrs) {
       attrs[attr.name] = attr.value;
     }
     if (attrs.href && attrs.rel === "stylesheet") return attrs.href;
     if (attrs.href && /\.css$/i.test(attrs.href.replace(/\?.+/))) return attrs.href;
-  }).filter(link => !!link);
+    return null;
+  }).filter(Boolean);
 }
 
 function extractStyleTags(html) {
   const matches = Array.from((html || "").matchAll(/<style.*?>([\s\S]*?)<\/style>/g) || []);
-  return matches.map(match => match[1]).map(css => css.trim()).filter(css => !!css);
+  return matches.map(match => match[1]).map(css => css.trim()).filter(Boolean);
 }
 
 function isValidCSS(string) {
@@ -147,7 +150,7 @@ async function extensionCss({crx, contentScriptsOnly, strict}) {
   return css;
 }
 
-module.exports = async function fetchCss(sources) {
+export default async function fetchCss(sources) { // eslint-disable-line import/no-unused-modules
   sources = clone(sources);
 
   const expandedSources = [];
@@ -203,4 +206,4 @@ module.exports = async function fetchCss(sources) {
   }
 
   return sources;
-};
+}

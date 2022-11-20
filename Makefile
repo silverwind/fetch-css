@@ -1,34 +1,37 @@
-node_modules: yarn.lock
-	@yarn -s --pure-lockfile
+node_modules: package-lock.json
+	npm install --no-save
 	@touch node_modules
 
+.PHONY: deps
 deps: node_modules
 
+.PHONY: lint
 lint: node_modules
-	yarn -s run eslint --color .
+	npx eslint --color .
 
-test: node_modules lint
-
+.PHONY: publish
 publish: node_modules
 	git push -u --tags origin master
 	npm publish
 
+.PHONY: update
 update: node_modules
-	yarn -s run updates -cu
-	@rm yarn.lock
-	@yarn -s
+	npx updates -cu
+	rm package-lock.json
+	npm install
 	@touch node_modules
 
-patch: node_modules test
-	yarn -s run versions patch
+.PHONY: path
+patch: node_modules lint
+	npx versions patch package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
 
-minor: node_modules test
-	yarn -s run versions minor
+.PHONY: minor
+minor: node_modules lint
+	npx versions minor package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
 
-major: node_modules test
-	yarn -s run versions major
+.PHONY: major
+major: node_modules lint
+	npx versions major package.json package-lock.json
 	@$(MAKE) --no-print-directory publish
-
-.PHONY: lint test unittest publish deps update patch minor major
