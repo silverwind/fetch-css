@@ -4,8 +4,6 @@
 import encLatin1 from "crypto-js/enc-latin1.js";
 import sha256 from "crypto-js/sha256.js";
 
-const btoa = require("base-64").encode;
-
 function calcLength(a, b, c, d) {
   let length = 0;
   length += a << 0; // eslint-disable-line unicorn/prefer-math-trunc

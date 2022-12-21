@@ -23,7 +23,6 @@
   ],
   "dependencies": {
     "acorn": "8.8.1",
-    "base-64": "1.0.0",
     "crypto-js": "4.1.1",
     "fetch-enhanced": "11.1.0",
     "node-fetch": "3.3.0",
