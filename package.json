@@ -5,8 +5,10 @@
   "author": "silverwind",
   "repository": "silverwind/fetch-css",
   "license": "BSD-2-Clause",
+  "type": "module",
+  "exports": "index.js",
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "keywords": [
     "fetch",
