@@ -8,7 +8,7 @@ import crxToZip from "./crx-to-zip.js";
 import nodeFetch from "node-fetch";
 import fetchEnhanced from "fetch-enhanced";
 
-const fetch = fetchEnhanced(nodeFetch);
+const fetch = fetchEnhanced(nodeFetch, {undici: false});
 const clone = cloner();
 
 async function extract(res) {
