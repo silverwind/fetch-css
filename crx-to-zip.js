@@ -1,8 +1,8 @@
 // based on https://github.com/Rob--W/crxviewer/blob/master/src/lib/crx-to-zip.js
 // (c) 2013 Rob Wu <rob@robwu.nl>
 
-import encLatin1 from "crypto-js/enc-latin1";
-import sha256 from "crypto-js/sha256";
+import encLatin1 from "crypto-js/enc-latin1.js";
+import sha256 from "crypto-js/sha256.js";
 
 const btoa = require("base-64").encode;
 
