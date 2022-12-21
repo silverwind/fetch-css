@@ -1,4 +1,4 @@
-import acorn from "acorn";
+import {parse} from "acorn";
 import cloner from "rfdc";
 import postcss from "postcss";
 import {parseFragment} from "parse5";
@@ -66,7 +66,7 @@ function isValidCSS(string) {
 function extractCssFromJs(js) {
   let css = "";
 
-  acorn.parse(js, {
+  parse(js, {
     ecmaVersion: "latest",
     onToken: token => {
       if (token.type.label === "string") {
