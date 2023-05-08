@@ -5,10 +5,10 @@ import {parseFragment} from "parse5";
 import unzipper from "unzipper";
 import urlToolkit from "url-toolkit";
 import crxToZip from "./crx-to-zip.js";
-import nodeFetch from "node-fetch";
+import {fetch as undiciFetch} from "undici";
 import fetchEnhanced from "fetch-enhanced";
 
-const fetch = fetchEnhanced(nodeFetch, {undici: false});
+const fetch = fetchEnhanced(undiciFetch, {undici: true});
 const clone = cloner();
 
 async function extract(res) {
@@ -71,7 +71,7 @@ function extractCssFromJs(js) {
     onToken: token => {
       if (token.type.label === "string") {
         const str = token.value.trim()
-          .replace(/\n/gm, "")
+          .replace(/\n/g, "")
           .replace(/^\);}/, ""); // this is probably not universal to webpack's css-in-js strings
 
         if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
