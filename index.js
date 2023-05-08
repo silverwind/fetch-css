@@ -63,6 +63,15 @@ function isValidCSS(string) {
   return false;
 }
 
+function arrayBufferToBufferCycle(ab) {
+  const buffer = new Buffer(ab.byteLength);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buffer.length; ++i) {
+    buffer[i] = view[i];
+  }
+  return buffer;
+}
+
 function extractCssFromJs(js) {
   let css = "";
 
@@ -100,7 +109,7 @@ async function extensionCss({crx, contentScriptsOnly, strict}) {
   const res = await fetch(url);
   validateStatus(res, url, strict);
 
-  const crxBuffer = await res.buffer();
+  const crxBuffer = arrayBufferToBufferCycle(await res.arrayBuffer());
   const zipBuffer = Buffer.from(crxToZip(crxBuffer));
 
   const files = {};
