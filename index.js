@@ -11,6 +11,15 @@ import fetchEnhanced from "fetch-enhanced";
 const fetch = fetchEnhanced(undiciFetch, {undici: true});
 const clone = cloner();
 
+async function doFetch(url, opts) {
+  try {
+    return await fetch(url, opts);
+  } catch (err) {
+    err.message = `${err.message} (${url})`;
+    throw err;
+  }
+}
+
 async function extract(res) {
   const styleUrls = [];
   const styleTags = [];
@@ -106,7 +115,7 @@ async function extensionCss({crx, contentScriptsOnly, strict}) {
   url += `&x=id%3D${crx}`;
   url += `%26uc`;
 
-  const res = await fetch(url);
+  const res = await doFetch(url);
   validateStatus(res, url, strict);
 
   const crxBuffer = arrayBufferToBufferCycle(await res.arrayBuffer());
@@ -176,7 +185,7 @@ export default async function fetchCss(sources) { // eslint-disable-line import/
   const sourceResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
     const {pathname} = new URL(source.url);
-    return pathname.endsWith(".css") || pathname.endsWith(".js") ? null : fetch(source.url, source.fetchOpts);
+    return pathname.endsWith(".css") || pathname.endsWith(".js") ? null : doFetch(source.url, source.fetchOpts);
   }));
 
   for (const [index, res] of Object.entries(sourceResponses)) {
@@ -193,7 +202,7 @@ export default async function fetchCss(sources) { // eslint-disable-line import/
 
   const fetchResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
-    return Promise.all(source.urls.map(url => fetch(url).then(res => res.text())));
+    return Promise.all(source.urls.map(url => doFetch(url).then(res => res.text())));
   }));
 
   for (const [index, responses] of Object.entries(fetchResponses)) {
