@@ -28,13 +28,13 @@
     "parse5": "7.1.2",
     "postcss": "8.4.23",
     "rfdc": "1.3.0",
-    "undici": "5.22.0",
-    "unzipper": "0.10.11",
+    "undici": "5.22.1",
+    "unzipper": "0.10.14",
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "8.40.0",
-    "eslint-config-silverwind": "69.0.2",
+    "eslint": "8.41.0",
+    "eslint-config-silverwind": "73.0.0",
     "updates": "14.1.0",
     "versions": "11.0.0"
   }
