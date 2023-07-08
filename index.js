@@ -196,6 +196,8 @@ export default async function fetchCss(sources) { // eslint-disable-line import/
 
   for (const [index, res] of Object.entries(sourceResponses)) {
     const source = sources[index];
+    source.urls = [];
+    source.styleTags = [];
     if (res) {
       for (const r of Array.isArray(res) ? res : [res]) {
         validateStatus(r, source.url, source.strict);
