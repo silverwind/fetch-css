@@ -185,16 +185,24 @@ export default async function fetchCss(sources) { // eslint-disable-line import/
   const sourceResponses = await Promise.all(sources.map(source => {
     if (!source.url) return null;
     const {pathname} = new URL(source.url);
-    return pathname.endsWith(".css") || pathname.endsWith(".js") ? null : doFetch(source.url, source.fetchOpts);
+    if (pathname.endsWith(".css") || pathname.endsWith(".js")) return null;
+
+    if (Array.isArray(source.url)) {
+      return source.url.map(url => doFetch(url, source.fetchOpts));
+    } else {
+      return doFetch(source.url, source.fetchOpts);
+    }
   }));
 
   for (const [index, res] of Object.entries(sourceResponses)) {
     const source = sources[index];
     if (res) {
-      validateStatus(res, source.url, source.strict);
-      const [styleUrls, styleTags] = await extract(res);
-      source.urls = styleUrls;
-      source.styleTags = styleTags;
+      for (const r of Array.isArray(res) ? res : [res]) {
+        validateStatus(r, source.url, source.strict);
+        const [styleUrls, styleTags] = await extract(r);
+        source.urls.push(...styleUrls);
+        source.styleTags.push(...styleTags);
+      }
     } else if (source.url) {
       source.urls = [source.url];
     }
