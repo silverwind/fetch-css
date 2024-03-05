@@ -167,7 +167,7 @@ async function extensionCss({crx, contentScriptsOnly, strict}) {
   return css;
 }
 
-export default async function fetchCss(sources) { // eslint-disable-line import/no-unused-modules
+export default async function fetchCss(sources) { // eslint-disable-line i/no-unused-modules
   sources = clone(sources);
 
   const expandedSources = [];
