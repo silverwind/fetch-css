@@ -155,10 +155,10 @@ function getPublicKeyFromProtoBuf(bytesView, startOffset, endOffset) {
     throw new Error("proto: Did not find crx_id");
   }
   const crxIdHex = encLatin1.parse(getBinaryString(crxIdBin, 0, 16)).toString();
-  for (let i = 0; i < publicKeys.length; ++i) {
-    const sha256sum = sha256(encLatin1.parse(publicKeys[i])).toString();
+  for (const publicKey of publicKeys) {
+    const sha256sum = sha256(encLatin1.parse(publicKey)).toString();
     if (sha256sum.slice(0, 32) === crxIdHex) {
-      return btoa(publicKeys[i]);
+      return btoa(publicKey);
     }
   }
   throw new Error("proto: None of the public keys matched with crx_id");

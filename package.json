@@ -34,8 +34,9 @@
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "8.57.0",
-    "eslint-config-silverwind": "80.0.5",
+    "eslint": "9.39.2",
+    "eslint-config-silverwind": "120.1.2",
+    "typescript-config-silverwind": "14.0.0",
     "updates": "15.1.2",
     "versions": "12.0.1"
   }
