@@ -26,15 +26,15 @@ update: node_modules
 
 .PHONY: path
 patch: node_modules lint
-	pnpm exec versions patch package.json pnpm-lock.yaml
+	pnpm exec versions patch package.json
 	@$(MAKE) --no-print-directory publish
 
 .PHONY: minor
 minor: node_modules lint
-	pnpm exec versions minor package.json pnpm-lock.yaml
+	pnpm exec versions minor package.json
 	@$(MAKE) --no-print-directory publish
 
 .PHONY: major
 major: node_modules lint
-	pnpm exec versions major package.json pnpm-lock.yaml
+	pnpm exec versions major package.json
 	@$(MAKE) --no-print-directory publish
