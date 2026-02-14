@@ -26,14 +26,14 @@ update: node_modules
 .PHONY: path
 patch: node_modules lint
 	pnpm exec versions patch package.json
-	@$(MAKE) --no-print-directory publish
+	git push -u --tags origin master
 
 .PHONY: minor
 minor: node_modules lint
 	pnpm exec versions minor package.json
-	@$(MAKE) --no-print-directory publish
+	git push -u --tags origin master
 
 .PHONY: major
 major: node_modules lint
 	pnpm exec versions major package.json
-	@$(MAKE) --no-print-directory publish
+	git push -u --tags origin master
