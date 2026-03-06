@@ -7,7 +7,7 @@
   "license": "BSD-2-Clause",
   "type": "module",
   "exports": "./index.js",
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.30.3",
   "engines": {
     "node": ">=14"
   },
@@ -23,22 +23,22 @@
     "crx-to-zip.js"
   ],
   "dependencies": {
-    "acorn": "8.15.0",
+    "acorn": "8.16.0",
     "crypto-js": "4.2.0",
-    "fetch-enhanced": "12.3.1",
+    "fetch-enhanced": "12.3.2",
     "parse5": "8.0.0",
-    "postcss": "8.5.6",
+    "postcss": "8.5.8",
     "rfdc": "1.4.1",
     "undici": "7.22.0",
     "unzipper": "0.12.3",
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "9.39.2",
-    "eslint-config-silverwind": "121.0.5",
+    "eslint": "9.39.3",
+    "eslint-config-silverwind": "122.0.2",
     "typescript-config-silverwind": "15.0.0",
-    "updates": "17.5.2",
+    "updates": "17.8.2",
     "updates-config-silverwind": "1.0.3",
-    "versions": "14.1.2"
+    "versions": "14.2.1"
   }
 }
