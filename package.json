@@ -6,6 +6,7 @@
   "repository": "silverwind/fetch-css",
   "license": "BSD-2-Clause",
   "type": "module",
+  "sideEffects": false,
   "exports": "./index.js",
   "packageManager": "pnpm@10.30.3",
   "engines": {
