@@ -90,7 +90,7 @@ function extractCssFromJs(js) {
       if (token.type.label === "string") {
         const str = token.value.trim()
           .replace(/\n/g, "")
-          .replace(/^\);}/, ""); // this is probably not universal to webpack's css-in-js strings
+          .replace(/^\);\}/, ""); // this is probably not universal to webpack's css-in-js strings
 
         if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
           css += `${str}\n`;
