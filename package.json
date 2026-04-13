@@ -8,7 +8,7 @@
   "type": "module",
   "sideEffects": false,
   "exports": "./index.js",
-  "packageManager": "pnpm@10.30.3",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=14"
   },
@@ -28,18 +28,18 @@
     "crypto-js": "4.2.0",
     "fetch-enhanced": "12.3.2",
     "parse5": "8.0.0",
-    "postcss": "8.5.8",
+    "postcss": "8.5.9",
     "rfdc": "1.4.1",
-    "undici": "7.22.0",
+    "undici": "8.0.3",
     "unzipper": "0.12.3",
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "9.39.3",
-    "eslint-config-silverwind": "122.0.4",
-    "typescript-config-silverwind": "15.0.0",
-    "updates": "17.8.2",
-    "updates-config-silverwind": "1.0.3",
+    "eslint": "9.39.4",
+    "eslint-config-silverwind": "131.0.4",
+    "typescript-config-silverwind": "17.0.0",
+    "updates": "17.15.2",
+    "updates-config-silverwind": "2.1.0",
     "versions": "14.3.1"
   }
 }
