@@ -55,8 +55,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(prettier@3.8.1)
       versions:
-        specifier: 14.3.1
-        version: 14.3.1
+        specifier: 15.0.0
+        version: 15.0.0
 
 packages:
 
@@ -853,8 +853,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  versions@14.3.1:
-    resolution: {integrity: sha512-goCSxgrE0dWs1lOBgvdfQEaSYHlY9ogHofsAZ9KLTp10uvkm/TlZY4/I7cl2/n80tmZFSCcnhfhlE+9CEuTrcg==}
+  versions@15.0.0:
+    resolution: {integrity: sha512-y+RVJFGDWqso8TfohGZGBqouZ0gF7LlB38b7r1Yq3nAKpmDfeWrVpbrqvqbiNPRm6rPTcVXg3BwjV3EQC+EP3Q==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -1631,7 +1631,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  versions@14.3.1: {}
+  versions@15.0.0: {}
 
   which@2.0.2:
     dependencies:
