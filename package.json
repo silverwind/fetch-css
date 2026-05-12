@@ -8,7 +8,7 @@
   "type": "module",
   "sideEffects": false,
   "exports": "./index.js",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@10.33.4",
   "engines": {
     "node": ">=14"
   },
@@ -26,21 +26,21 @@
   "dependencies": {
     "acorn": "8.16.0",
     "crypto-js": "4.2.0",
-    "fetch-enhanced": "12.3.2",
-    "parse5": "8.0.0",
-    "postcss": "8.5.9",
+    "fetch-enhanced": "13.0.0",
+    "parse5": "8.0.1",
+    "postcss": "8.5.14",
     "rfdc": "1.4.1",
-    "undici": "8.0.3",
+    "undici": "8.2.0",
     "unzipper": "0.12.3",
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "9.39.4",
-    "eslint-config-silverwind": "131.0.4",
+    "eslint": "10.3.0",
+    "eslint-config-silverwind": "133.0.1",
     "jest-extended": "7.0.0",
-    "typescript-config-silverwind": "17.0.0",
-    "updates": "17.15.2",
-    "updates-config-silverwind": "2.1.0",
-    "versions": "15.0.0"
+    "typescript-config-silverwind": "18.0.0",
+    "updates": "17.16.10",
+    "updates-config-silverwind": "3.0.2",
+    "versions": "15.0.3"
   }
 }
