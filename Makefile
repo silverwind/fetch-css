@@ -19,8 +19,7 @@ lint-fix: node_modules build
 	pnpm exec tsgo
 
 .PHONY: test
-test:
-	@true
+test: lint
 
 .PHONY: build
 build: node_modules $(DIST_FILES)
