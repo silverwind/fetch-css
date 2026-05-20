@@ -7,10 +7,13 @@
   "license": "BSD-2-Clause",
   "type": "module",
   "sideEffects": false,
-  "exports": "./index.js",
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "packageManager": "pnpm@10.33.4",
   "engines": {
-    "node": ">=14"
+    "node": ">=22",
+    "bun": "*"
   },
   "keywords": [
     "fetch",
@@ -20,8 +23,7 @@
     "crx"
   ],
   "files": [
-    "index.js",
-    "crx-to-zip.js"
+    "dist"
   ],
   "dependencies": {
     "acorn": "8.16.0",
@@ -35,12 +37,18 @@
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "eslint": "10.3.0",
-    "eslint-config-silverwind": "133.0.1",
-    "jest-extended": "7.0.0",
+    "@types/crypto-js": "4.2.2",
+    "@types/node": "25.8.0",
+    "@types/unzipper": "0.10.11",
+    "@typescript/native-preview": "7.0.0-dev.20260515.1",
+    "eslint": "10.4.0",
+    "eslint-config-silverwind": "133.0.2",
+    "tsdown": "0.22.0",
+    "tsdown-config-silverwind": "3.0.1",
+    "typescript": "6.0.3",
     "typescript-config-silverwind": "18.0.0",
-    "updates": "17.16.10",
+    "updates": "17.16.12",
     "updates-config-silverwind": "3.0.2",
-    "versions": "15.0.3"
+    "versions": "15.0.4"
   }
 }

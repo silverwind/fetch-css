@@ -1,3 +1,6 @@
+SOURCE_FILES := index.ts crx-to-zip.ts
+DIST_FILES := dist/index.js
+
 node_modules: pnpm-lock.yaml
 	pnpm install
 	@touch node_modules
@@ -5,16 +8,25 @@ node_modules: pnpm-lock.yaml
 .PHONY: deps
 deps: node_modules
 
-.PHONY: test
-test: lint
-
 .PHONY: lint
-lint: node_modules
+lint: node_modules build
 	pnpm exec eslint-silverwind --color .
+	pnpm exec tsgo
 
 .PHONY: lint-fix
-lint-fix: node_modules
+lint-fix: node_modules build
 	pnpm exec eslint-silverwind --color . --fix
+	pnpm exec tsgo
+
+.PHONY: test
+test:
+	@true
+
+.PHONY: build
+build: node_modules $(DIST_FILES)
+
+$(DIST_FILES): $(SOURCE_FILES) pnpm-lock.yaml package.json tsdown.config.ts
+	pnpm exec tsdown
 
 .PHONY: publish
 publish: node_modules
@@ -23,11 +35,11 @@ publish: node_modules
 .PHONY: update
 update: node_modules
 	pnpm exec updates -cu
-	rm pnpm-lock.yaml
+	rm -rf node_modules pnpm-lock.yaml
 	pnpm install
 	@touch node_modules
 
-.PHONY: path
+.PHONY: patch
 patch: node_modules lint
 	pnpm exec versions -R patch package.json
 

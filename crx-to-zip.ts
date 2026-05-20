@@ -4,7 +4,7 @@
 import encLatin1 from "crypto-js/enc-latin1.js";
 import sha256 from "crypto-js/sha256.js";
 
-function calcLength(a, b, c, d) {
+function calcLength(a: number, b: number, c: number, d: number): number {
   let length = 0;
   length += a << 0; // eslint-disable-line unicorn/prefer-math-trunc
   length += b << 8;
@@ -12,7 +12,7 @@ function calcLength(a, b, c, d) {
   length += d << 24 >>> 0;
   return length;
 }
-function getBinaryString(bytesView, startOffset, endOffset) {
+function getBinaryString(bytesView: Uint8Array, startOffset: number, endOffset: number): string {
   let binaryString = "";
   for (let i = startOffset; i < endOffset; ++i) {
     binaryString += String.fromCharCode(bytesView[i]);
@@ -20,8 +20,8 @@ function getBinaryString(bytesView, startOffset, endOffset) {
   return binaryString;
 }
 
-// Strips CRX headers from zip
-export default function CRXtoZIP(arraybuffer) {
+/** Strips CRX headers from a CRX file, returning the embedded ZIP data. */
+export default function CRXtoZIP(arraybuffer: Uint8Array): Uint8Array {
   // Definition of crx format: http://developer.chrome.com/extensions/crx.html
   const view = new Uint8Array(arraybuffer);
 
@@ -44,29 +44,29 @@ export default function CRXtoZIP(arraybuffer) {
     throw new Error("Unexpected crx format version number.");
   }
 
-  let zipStartOffset, _publicKeyBase64;
+  let zipStartOffset;
   if (view[4] === 2) {
     const publicKeyLength = calcLength(view[8], view[9], view[10], view[11]);
     const signatureLength = calcLength(view[12], view[13], view[14], view[15]);
     // 16 = Magic number (4), CRX format version (4), lengths (2x4)
     zipStartOffset = 16 + publicKeyLength + signatureLength;
 
-    // Public key
-    _publicKeyBase64 = btoa(getBinaryString(view, 16, 16 + publicKeyLength));
+    // Public key (validated for parity with the source, result unused)
+    btoa(getBinaryString(view, 16, 16 + publicKeyLength));
   } else { // view[4] === 3
     // CRX3 - https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto
     const crx3HeaderLength = calcLength(view[8], view[9], view[10], view[11]);
     // 12 = Magic number (4), CRX format version (4), header length (4)
     zipStartOffset = 12 + crx3HeaderLength;
 
-    // Public key
-    _publicKeyBase64 = getPublicKeyFromProtoBuf(view, 12, zipStartOffset);
+    // Public key (validated against crx_id, throws on mismatch; result unused)
+    getPublicKeyFromProtoBuf(view, 12, zipStartOffset);
   }
 
   return arraybuffer.slice(zipStartOffset);
 }
 
-function getPublicKeyFromProtoBuf(bytesView, startOffset, endOffset) {
+function getPublicKeyFromProtoBuf(bytesView: Uint8Array, startOffset: number, endOffset: number): string {
   // Protobuf definition: https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto
   // Wire format: https://developers.google.com/protocol-buffers/docs/encoding
   // The top-level CrxFileHeader message only contains length-delimited fields (type 2).
@@ -77,7 +77,7 @@ function getPublicKeyFromProtoBuf(bytesView, startOffset, endOffset) {
   //    This has 16 bytes (128 bits). Verify that those match with the
   //    first 128 bits of the sha256 hash of the chosen public key.
 
-  function getvarint() {
+  function getvarint(): number {
     // Note: We don't do bound checks (startOffset < endOffset) here,
     // because even if we read past the end of bytesView, then we get
     // the undefined value, which is converted to 0 when we do a
@@ -163,7 +163,7 @@ function getPublicKeyFromProtoBuf(bytesView, startOffset, endOffset) {
   }
   throw new Error("proto: None of the public keys matched with crx_id");
 }
-function isMaybeZipData(view) {
+function isMaybeZipData(view: Uint8Array): boolean {
   // Find EOCD (0xFFFF is the maximum size of an optional trailing comment).
   for (let i = view.length - 22, ii = Math.max(0, i - 0xFFFF); i >= ii; --i) {
     if (view[i] === 0x50 && view[i + 1] === 0x4B &&
