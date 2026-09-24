@@ -10,7 +10,7 @@
   "main": "./dist/index.js",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "packageManager": "pnpm@12.3.4",
+  "packageManager": "pnpm@12.6.0",
   "engines": {
     "node": ">=22",
     "bun": "*"
@@ -26,29 +26,29 @@
     "dist"
   ],
   "dependencies": {
-    "acorn": "8.16.0",
+    "acorn": "8.18.0",
     "crypto-js": "4.2.0",
     "fetch-enhanced": "13.0.0",
     "parse5": "8.0.1",
-    "postcss": "8.5.14",
+    "postcss": "8.5.28",
     "rfdc": "1.4.1",
-    "undici": "8.2.0",
-    "unzipper": "0.12.3",
+    "undici": "8.11.2",
+    "unzipper": "0.12.5",
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
     "@types/crypto-js": "4.2.2",
-    "@types/node": "25.8.0",
+    "@types/node": "26.6.2",
     "@types/unzipper": "0.10.11",
-    "@typescript/native-preview": "7.0.0-dev.20260515.1",
-    "eslint": "10.4.0",
-    "eslint-config-silverwind": "133.0.2",
-    "tsdown": "0.22.0",
-    "tsdown-config-silverwind": "3.0.1",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "eslint": "10.11.0",
+    "eslint-config-silverwind": "151.0.0",
+    "tsdown": "0.23.0",
+    "tsdown-config-silverwind": "4.1.1",
     "typescript": "6.0.3",
-    "typescript-config-silverwind": "18.0.0",
-    "updates": "17.16.12",
-    "updates-config-silverwind": "4.0.0",
-    "versions": "15.0.4"
+    "typescript-config-silverwind": "20.0.4",
+    "updates": "19.0.0",
+    "updates-config-silverwind": "4.0.6",
+    "versions": "15.5.0"
   }
 }

@@ -6,7 +6,7 @@ import sha256 from "crypto-js/sha256.js";
 
 function calcLength(a: number, b: number, c: number, d: number): number {
   let length = 0;
-  length += a << 0; // eslint-disable-line unicorn/prefer-math-trunc
+  length += a;
   length += b << 8;
   length += c << 16;
   length += d << 24 >>> 0;

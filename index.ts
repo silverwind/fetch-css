@@ -232,7 +232,7 @@ export default async function fetchCss(sources: Array<Source>): Promise<Array<So
 
   const fetchResponses = await Promise.all(sources.map(source => {
     if (!source.url) return Promise.resolve(null);
-    return Promise.all(source.urls!.map(url => doFetch(url).then(res => res.text())));
+    return Promise.all(source.urls!.map(async url => (await doFetch(url)).text()));
   }));
 
   for (const [index, responses] of fetchResponses.entries()) {
