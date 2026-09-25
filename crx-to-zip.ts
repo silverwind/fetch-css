@@ -1,8 +1,7 @@
 // based on https://github.com/Rob--W/crxviewer/blob/master/src/lib/crx-to-zip.js
 // (c) 2013 Rob Wu <rob@robwu.nl>
 
-import encLatin1 from "crypto-js/enc-latin1.js";
-import sha256 from "crypto-js/sha256.js";
+import {createHash} from "node:crypto";
 
 function calcLength(a: number, b: number, c: number, d: number): number {
   let length = 0;
@@ -154,9 +153,9 @@ function getPublicKeyFromProtoBuf(bytesView: Uint8Array, startOffset: number, en
   if (!crxIdBin) {
     throw new Error("proto: Did not find crx_id");
   }
-  const crxIdHex = encLatin1.parse(getBinaryString(crxIdBin, 0, 16)).toString();
+  const crxIdHex = Buffer.from(crxIdBin).toString("hex");
   for (const publicKey of publicKeys) {
-    const sha256sum = sha256(encLatin1.parse(publicKey)).toString();
+    const sha256sum = createHash("sha256").update(publicKey, "latin1").digest("hex");
     if (sha256sum.slice(0, 32) === crxIdHex) {
       return btoa(publicKey);
     }

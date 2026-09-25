@@ -3,7 +3,10 @@
   "version": "5.0.0",
   "description": "Extract CSS from websites and browser extensions",
   "author": "silverwind",
-  "repository": "silverwind/fetch-css",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silverwind/fetch-css.git"
+  },
   "license": "BSD-2-Clause",
   "type": "module",
   "sideEffects": false,
@@ -27,7 +30,6 @@
   ],
   "dependencies": {
     "acorn": "8.18.0",
-    "crypto-js": "4.2.0",
     "fetch-enhanced": "13.0.0",
     "parse5": "8.0.1",
     "postcss": "8.5.28",
@@ -37,7 +39,6 @@
     "url-toolkit": "2.2.5"
   },
   "devDependencies": {
-    "@types/crypto-js": "4.2.2",
     "@types/node": "26.6.2",
     "@types/unzipper": "0.10.11",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
