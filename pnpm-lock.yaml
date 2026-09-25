@@ -170,8 +170,8 @@ importers:
         specifier: 8.18.0
         version: 8.18.0
       fetch-enhanced:
-        specifier: 13.0.0
-        version: 13.0.0(undici@8.11.2)
+        specifier: 13.0.1
+        version: 13.0.1(undici@8.11.2)
       parse5:
         specifier: 8.0.1
         version: 8.0.1
@@ -216,8 +216,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       typescript-config-silverwind:
-        specifier: 20.0.4
-        version: 20.0.4
+        specifier: 21.0.0
+        version: 21.0.0
       updates:
         specifier: 19.0.0
         version: 19.0.0
@@ -960,8 +960,8 @@ packages:
       picomatch:
         optional: true
 
-  fetch-enhanced@13.0.0:
-    resolution: {integrity: sha512-BafTtWcJK/3KGeWtFFtS0NvZE3cSg46AzUwgqNLtlc/RlQEeZXMN22rmkUBLm4axtWePTTZX/hU80TW5XVIP1A==}
+  fetch-enhanced@13.0.1:
+    resolution: {integrity: sha512-k8f0G/CIasMOQxn0M+Y0Gs7F9+p8769D2JvzvJAf/13T5SiBoWGAuChr+udcoIkiyb1gbtwCwG4BGQj36WzjPA==}
     engines: {node: '>=22'}
     peerDependencies:
       undici: '*'
@@ -1284,8 +1284,8 @@ packages:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
 
-  typescript-config-silverwind@20.0.4:
-    resolution: {integrity: sha512-DuKWELOunfUcQEXrjED0fJN93kmPJlBbYlaBSIagxRSzlzNIlW7BBnmvrWojx/+QdHfV37EQGpxbZNSJ7SCOEA==}
+  typescript-config-silverwind@21.0.0:
+    resolution: {integrity: sha512-R3T6SKvIM5KTHT9LovnRspYqvkcwWexKnzngSflDe35sgE6zVDwEoyaucURv5xrSF/IyqnmLUm/Qp/Js6OBC8w==}
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -1944,7 +1944,7 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.7
 
-  fetch-enhanced@13.0.0(undici@8.11.2):
+  fetch-enhanced@13.0.1(undici@8.11.2):
     optionalDependencies:
       undici: 8.11.2
 
@@ -2226,7 +2226,7 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  typescript-config-silverwind@20.0.4: {}
+  typescript-config-silverwind@21.0.0: {}
 
   typescript@6.0.3: {}
 

@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "acorn": "8.18.0",
-    "fetch-enhanced": "13.0.0",
+    "fetch-enhanced": "13.0.1",
     "parse5": "8.0.1",
     "postcss": "8.5.28",
     "rfdc": "1.4.1",
@@ -47,7 +47,7 @@
     "tsdown": "0.23.0",
     "tsdown-config-silverwind": "4.1.1",
     "typescript": "6.0.3",
-    "typescript-config-silverwind": "20.0.4",
+    "typescript-config-silverwind": "21.0.0",
     "updates": "19.0.0",
     "updates-config-silverwind": "4.0.6",
     "versions": "15.5.0"
