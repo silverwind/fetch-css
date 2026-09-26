@@ -1,20 +1,22 @@
 # fetch-css
 [![](https://img.shields.io/npm/v/fetch-css.svg?style=flat)](https://www.npmjs.org/package/fetch-css) [![](https://img.shields.io/npm/dm/fetch-css.svg)](https://www.npmjs.org/package/fetch-css) [![](https://packagephobia.com/badge?p=fetch-css)](https://packagephobia.com/result?p=fetch-css)
+
 > Extract CSS from websites and browser extensions
 
 ## Usage
 
-```console
-npm i fetch-css
+```sh
+pnpm add fetch-css
 ```
+
 ```js
 import fetchCss from "fetch-css";
 
-// retrieve CSS of a website
-const [{css}] = await fetchCss([{url: "https://example.com"}]);
-
-// extract CSS from a Chrome extension
-const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
+const [website, extension] = await fetchCss([
+  {url: "https://example.com"},
+  {crx: "hlepfoohegkhhmjieoechaddaejaokhf"}, // a Chrome extension
+]);
+console.log(website.css, extension.css);
 ```
 
 ## API
@@ -23,9 +25,9 @@ const [{css}] = await fetchCss([{crx: "hlepfoohegkhhmjieoechaddaejaokhf"}]);
 - `sources`: *Array* Array of source objects
   - `source`: *Object*
     - `url`: *string* or *Array* An absolute URL pointing to either a website or directly to a CSS or JS file (to extract inlined CSS strings from)
-    - `fetchOpts`: *Object* Options passed to [fetch](https://github.com/npm/make-fetch-happen#fetch)
+    - `fetchOpts`: *Object* Options passed to [fetch](https://github.com/silverwind/fetch-enhanced#fetchurl-opts)
     - `crx`: *string* A Chrome extension id
-    - `contentScriptsOnly`: *boolean* Whether to pull only content scripts from a extension. Default: `false`
+    - `contentScriptsOnly`: *boolean* Whether to pull only content scripts from an extension. Default: `false`
     - `strict`: *boolean* Whether to throw an error if fetch fails. Default: `false`
 
 Returns a `Promise` that resolves to a `sources` array with additional `css` properties present on each source.
