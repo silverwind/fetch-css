@@ -77,23 +77,29 @@ function isValidCSS(css: string): boolean {
   }
 }
 
-function extractCssFromJs(js: string): string {
+function extractCssFromJs(js: string, sourceType: "script" | "module" = "script"): string {
   let css = "";
 
-  parse(js, {
-    ecmaVersion: "latest",
-    onToken: token => {
-      if (token.type.label === "string") {
-        const str = (token as unknown as {value: string}).value.trim()
-          .replace(/\n/g, "")
-          .replace(/^\);\}/, ""); // this is probably not universal to webpack's css-in-js strings
+  try {
+    parse(js, {
+      ecmaVersion: "latest",
+      sourceType,
+      onToken: token => {
+        if (token.type.label === "string") {
+          const str = (token as unknown as {value: string}).value.trim()
+            .replace(/\n/g, "")
+            .replace(/^\);\}/, ""); // this is probably not universal to webpack's css-in-js strings
 
-        if (str.length > 25 && isValidCSS(str)) { // threshold to ignore short strings that happen to be valid CSS
-          css += `${str}\n`;
+          if (str.length > 25 && isValidCSS(str)) { // threshold to ignore short strings that happen to be valid CSS
+            css += `${str}\n`;
+          }
         }
-      }
-    },
-  });
+      },
+    });
+  } catch (err) {
+    if (sourceType === "module" || !(err instanceof SyntaxError)) throw err;
+    return extractCssFromJs(js, "module"); // script first because sloppy-mode code can fail or tokenize differently as a module
+  }
 
   return css.trim();
 }
