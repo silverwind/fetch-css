@@ -42,22 +42,7 @@ async function doFetch(url: string, opts?: FetchOpts): Promise<Response> {
   }
 }
 
-async function extract(res: Response): Promise<[Array<string>, Array<string>]> {
-  const styleUrls: Array<string> = [];
-  const styleTags: Array<string> = [];
-  const html = await res.text();
-
-  for (const href of extractStyleHrefs(html)) {
-    styleUrls.push(urlToolkit.buildAbsoluteURL(res.url, href));
-  }
-  for (const style of extractStyleTags(html)) {
-    styleTags.push(style);
-  }
-
-  return [styleUrls, styleTags];
-}
-
-function validateStatus(res: Response, url: string | undefined, strict: boolean | undefined): void {
+function validateStatus(res: Response, url: string, strict: boolean | undefined): void {
   if (res.status === 200) return;
   const msg = `Failed to fetch ${url}: ${res.status} ${res.statusText}`;
   if (strict) {
@@ -80,27 +65,16 @@ function extractStyleHrefs(html: string): Array<string> {
 }
 
 function extractStyleTags(html: string): Array<string> {
-  const matches = Array.from((html || "").matchAll(/<style.*?>([\s\S]*?)<\/style>/g) || []);
-  return matches.map(match => match[1]).map(css => css.trim()).filter(Boolean);
+  return Array.from(html.matchAll(/<style.*?>([\s\S]*?)<\/style>/g), match => match[1].trim()).filter(Boolean);
 }
 
-function isValidCSS(string: string): boolean {
+function isValidCSS(css: string): boolean {
   try {
-    const root = postcss.parse(string);
-    if (root && root.type === "root" && Array.isArray(root.nodes) && root.nodes.length >= 1 && root.nodes.every(node => node.type === "rule")) {
-      return true;
-    }
-  } catch {}
-  return false;
-}
-
-function arrayBufferToBufferCycle(ab: ArrayBuffer): Buffer {
-  const buffer = Buffer.alloc(ab.byteLength);
-  const view = new Uint8Array(ab);
-  for (let i = 0; i < buffer.length; ++i) {
-    buffer[i] = view[i];
+    const {nodes} = postcss.parse(css);
+    return nodes.length >= 1 && nodes.every(node => node.type === "rule");
+  } catch {
+    return false;
   }
-  return buffer;
 }
 
 function extractCssFromJs(js: string): string {
@@ -114,7 +88,7 @@ function extractCssFromJs(js: string): string {
           .replace(/\n/g, "")
           .replace(/^\);\}/, ""); // this is probably not universal to webpack's css-in-js strings
 
-        if (str.length > 25 && isValidCSS(str)) { // hackish treshold to ignore short strings that may be valid CSS,
+        if (str.length > 25 && isValidCSS(str)) { // threshold to ignore short strings that happen to be valid CSS
           css += `${str}\n`;
         }
       }
@@ -140,11 +114,10 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
   const res = await doFetch(url);
   validateStatus(res, url, strict);
 
-  const crxBuffer = arrayBufferToBufferCycle(await res.arrayBuffer());
-  const zipBuffer = Buffer.from(crxToZip(crxBuffer));
+  const zipBuffer = Buffer.from(crxToZip(Buffer.from(await res.arrayBuffer())));
 
   const files: Record<string, unzipper.File> = {};
-  for (const file of (await unzipper.Open.buffer(zipBuffer) || {files: []}).files) {
+  for (const file of (await unzipper.Open.buffer(zipBuffer)).files) {
     files[file.path] = file;
   }
 
@@ -152,8 +125,8 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
     throw new Error(`manifest.json not found in extension ${crx}`);
   }
 
-  let cssFiles: Array<string> = [];
-  let jsFiles: Array<string> = [];
+  const cssFiles: Array<string> = [];
+  const jsFiles: Array<string> = [];
 
   if (!contentScriptsOnly) {
     for (const path of Object.keys(files)) {
@@ -164,26 +137,17 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
 
   const manifest = JSON.parse(String(await files["manifest.json"].buffer()));
   for (const {css, js} of manifest.content_scripts || []) {
-    if (Array.isArray(css) && css.length) cssFiles.push(...css);
-    if (Array.isArray(js) && js.length) jsFiles.push(...js);
+    if (Array.isArray(css)) cssFiles.push(...css);
+    if (Array.isArray(js)) jsFiles.push(...js);
   }
-
-  // dedupe
-  cssFiles = Array.from(new Set(cssFiles));
-  jsFiles = Array.from(new Set(jsFiles));
-
-  // remove leading slash
-  cssFiles = cssFiles.map(p => p.replace(/^\//, ""));
-  jsFiles = jsFiles.map(p => p.replace(/^\//, ""));
 
   let css = "";
-  for (const file of cssFiles) {
-    css += `${String(await files[file].buffer())}\n`;
+  for (const file of new Set(cssFiles)) {
+    css += `${String(await files[file.replace(/^\//, "")].buffer())}\n`;
   }
 
-  for (const file of jsFiles) {
-    const js = String(await files[file].buffer());
-    css += extractCssFromJs(js);
+  for (const file of new Set(jsFiles)) {
+    css += extractCssFromJs(String(await files[file.replace(/^\//, "")].buffer()));
   }
 
   return css;
@@ -195,19 +159,9 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
  * Returns the given `sources` array with an additional `css` property present on each source.
  */
 export default async function fetchCss(sources: Array<Source>): Promise<Array<Source>> {
-  sources = clone(sources);
-
-  const expandedSources: Array<Source> = [];
-  for (const source of sources) {
-    if ("url" in source && Array.isArray(source.url)) {
-      for (const url of source.url) {
-        expandedSources.push({...source, url});
-      }
-    } else {
-      expandedSources.push(source);
-    }
-  }
-  sources = expandedSources;
+  sources = clone(sources).flatMap(source => {
+    return "url" in source && Array.isArray(source.url) ? source.url.map(url => ({...source, url})) : [source];
+  });
 
   const sourceResponses = await Promise.all(sources.map(source => {
     if (!source.url) return Promise.resolve(null);
@@ -222,9 +176,9 @@ export default async function fetchCss(sources: Array<Source>): Promise<Array<So
     source.styleTags = [];
     if (res) {
       validateStatus(res, source.url as string, source.strict);
-      const [styleUrls, styleTags] = await extract(res);
-      source.urls.push(...styleUrls);
-      source.styleTags.push(...styleTags);
+      const html = await res.text();
+      source.urls = extractStyleHrefs(html).map(href => urlToolkit.buildAbsoluteURL(res.url, href));
+      source.styleTags = extractStyleTags(html);
     } else if (source.url) {
       source.urls = [source.url as string];
     }
@@ -240,14 +194,12 @@ export default async function fetchCss(sources: Array<Source>): Promise<Array<So
 
     if (source.crx) {
       source.css = await extensionCss(source);
+    } else if ((source.url as string).endsWith(".js")) {
+      source.css = extractCssFromJs(responses!.join("\n"));
     } else {
-      if ((source.url as string).endsWith(".js")) {
-        source.css = extractCssFromJs(responses!.join("\n"));
-      } else {
-        source.css = responses!.join("\n");
-        if (source.styleTags?.length) {
-          source.css += `\n${source.styleTags.join("\n")}`;
-        }
+      source.css = responses!.join("\n");
+      if (source.styleTags!.length) {
+        source.css += `\n${source.styleTags!.join("\n")}`;
       }
     }
   }

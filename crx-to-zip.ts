@@ -20,10 +20,8 @@ function getBinaryString(bytesView: Uint8Array, startOffset: number, endOffset: 
 }
 
 /** Strips CRX headers from a CRX file, returning the embedded ZIP data. */
-export default function CRXtoZIP(arraybuffer: Uint8Array): Uint8Array {
+export default function CRXtoZIP(view: Uint8Array): Uint8Array {
   // Definition of crx format: http://developer.chrome.com/extensions/crx.html
-  const view = new Uint8Array(arraybuffer);
-
   // 50 4b 03 04
   if (view[0] === 80 && view[1] === 75 && view[2] === 3 && view[3] === 4) {
     throw new Error("Input is not a CRX file, but a ZIP file.");
@@ -62,7 +60,7 @@ export default function CRXtoZIP(arraybuffer: Uint8Array): Uint8Array {
     getPublicKeyFromProtoBuf(view, 12, zipStartOffset);
   }
 
-  return arraybuffer.slice(zipStartOffset);
+  return view.slice(zipStartOffset);
 }
 
 function getPublicKeyFromProtoBuf(bytesView: Uint8Array, startOffset: number, endOffset: number): string {
