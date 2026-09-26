@@ -156,7 +156,8 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
 /**
  * Extract CSS from websites and browser extensions.
  *
- * Returns the given `sources` array with an additional `css` property present on each source.
+ * Returns a copy of the `sources` array with an additional `css` property present on each source.
+ * Sources with an array `url` are expanded into one source per URL.
  */
 export default async function fetchCss(sources: Array<Source>): Promise<Array<Source>> {
   sources = clone(sources).flatMap(source => {

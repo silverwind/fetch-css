@@ -30,7 +30,7 @@ console.log(website.css, extension.css);
     - `contentScriptsOnly`: *boolean* Whether to pull only content scripts from an extension. Default: `false`
     - `strict`: *boolean* Whether to throw an error if fetch fails. Default: `false`
 
-Returns a `Promise` that resolves to a `sources` array with additional `css` properties present on each source.
+Returns a `Promise` that resolves to a copy of the `sources` array with additional `css` properties present on each source. Sources with an array `url` are expanded into one source per URL.
 
 ## Related
 
