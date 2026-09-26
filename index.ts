@@ -205,7 +205,7 @@ export default async function fetchCss(sources: Array<Source>): Promise<Array<So
 
     if (source.crx) {
       source.css = await extensionCss(source);
-    } else if ((source.url as string).endsWith(".js")) {
+    } else if (new URL(source.url as string).pathname.endsWith(".js")) {
       source.css = extractCssFromJs(responses!.join("\n"));
     } else {
       source.css = responses!.join("\n");
