@@ -98,7 +98,11 @@ function extractCssFromJs(js: string, sourceType: "script" | "module" = "script"
     });
   } catch (err) {
     if (sourceType === "module" || !(err instanceof SyntaxError)) throw err;
-    return extractCssFromJs(js, "module"); // script first because sloppy-mode code can fail or tokenize differently as a module
+    try {
+      return extractCssFromJs(js, "module"); // script first because sloppy-mode code can fail or tokenize differently as a module
+    } catch {
+      throw err;
+    }
   }
 
   return css.trim();
