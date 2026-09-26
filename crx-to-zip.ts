@@ -21,7 +21,7 @@ function getBinaryString(bytesView: Uint8Array, startOffset: number, endOffset: 
 
 /** Strips CRX headers from a CRX file, returning the embedded ZIP data. */
 export default function CRXtoZIP(view: Uint8Array): Uint8Array {
-  // Definition of crx format: http://developer.chrome.com/extensions/crx.html
+  // Definition of crx format: https://source.chromium.org/chromium/chromium/src/+/main:components/crx_file/crx3.proto
   // 50 4b 03 04
   if (view[0] === 80 && view[1] === 75 && view[2] === 3 && view[3] === 4) {
     throw new Error("Input is not a CRX file, but a ZIP file.");
@@ -51,7 +51,7 @@ export default function CRXtoZIP(view: Uint8Array): Uint8Array {
     // Public key (validated for parity with the source, result unused)
     btoa(getBinaryString(view, 16, 16 + publicKeyLength));
   } else { // view[4] === 3
-    // CRX3 - https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto
+    // CRX3 - https://source.chromium.org/chromium/chromium/src/+/main:components/crx_file/crx3.proto
     const crx3HeaderLength = calcLength(view[8], view[9], view[10], view[11]);
     // 12 = Magic number (4), CRX format version (4), header length (4)
     zipStartOffset = 12 + crx3HeaderLength;
@@ -64,8 +64,8 @@ export default function CRXtoZIP(view: Uint8Array): Uint8Array {
 }
 
 function getPublicKeyFromProtoBuf(bytesView: Uint8Array, startOffset: number, endOffset: number): string {
-  // Protobuf definition: https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto
-  // Wire format: https://developers.google.com/protocol-buffers/docs/encoding
+  // Protobuf definition: https://source.chromium.org/chromium/chromium/src/+/main:components/crx_file/crx3.proto
+  // Wire format: https://protobuf.dev/programming-guides/encoding/
   // The top-level CrxFileHeader message only contains length-delimited fields (type 2).
   // To find the public key:
   // 1. Look for CrxFileHeader.sha256_with_rsa (field number 2).
