@@ -47,9 +47,6 @@ export default function CRXtoZIP(view: Uint8Array): Uint8Array {
     const signatureLength = calcLength(view[12], view[13], view[14], view[15]);
     // 16 = Magic number (4), CRX format version (4), lengths (2x4)
     zipStartOffset = 16 + publicKeyLength + signatureLength;
-
-    // Public key (validated for parity with the source, result unused)
-    btoa(getBinaryString(view, 16, 16 + publicKeyLength));
   } else { // view[4] === 3
     // CRX3 - https://source.chromium.org/chromium/chromium/src/+/main:components/crx_file/crx3.proto
     const crx3HeaderLength = calcLength(view[8], view[9], view[10], view[11]);
