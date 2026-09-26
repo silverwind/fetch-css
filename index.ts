@@ -53,7 +53,7 @@ function validateStatus(res: Response, url: string, strict: boolean | undefined)
 }
 
 function extractStyleHrefs(html: string): Array<string> {
-  return (html.match(/<link.+?>/g) || []).map(link => {
+  return (html.match(/<link.+?>/gis) || []).map(link => {
     const attrs: Record<string, string> = {};
     for (const attr of (parseFragment(link).childNodes[0] as DefaultTreeAdapterMap["element"]).attrs) {
       attrs[attr.name] = attr.value;
@@ -65,7 +65,7 @@ function extractStyleHrefs(html: string): Array<string> {
 }
 
 function extractStyleTags(html: string): Array<string> {
-  return Array.from(html.matchAll(/<style.*?>([\s\S]*?)<\/style>/g), match => match[1].trim()).filter(Boolean);
+  return Array.from(html.matchAll(/<style.*?>(.*?)<\/style>/gis), match => match[1].trim()).filter(Boolean);
 }
 
 function isValidCSS(css: string): boolean {
