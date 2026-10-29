@@ -126,7 +126,7 @@ async function extensionCss({crx, contentScriptsOnly, strict}: Source): Promise<
 
   const zipBuffer = Buffer.from(crxToZip(Buffer.from(await res.arrayBuffer())));
 
-  const files: Record<string, unzipper.File> = {};
+  const files: Record<string, unzipper.File> = Object.create(null);
   for (const file of (await unzipper.Open.buffer(zipBuffer)).files) {
     files[file.path] = file;
   }
